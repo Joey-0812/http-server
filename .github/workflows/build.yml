@@ -6,6 +6,8 @@ name: Go
 on:
   push:
     branches: [ "main" ]
+    tags:
+          - 'v*'
   pull_request:
     branches: [ "main" ]
 
@@ -45,19 +47,26 @@ jobs:
         with:
           name: http-server
           path: /home/runner/work/http-server/http-server
+      
       - uses: actions/checkout@v4
-
-
-      - id: create_docker_tags
-        run: |
-          ls
-          echo "::set-output name=tags::latest,$(git tag -l --sort=-v:refname | head -1)"
-          echo ${{ steps.create_docker_tags.outputs.tags }}
+      # 提取 Docker 元数据（标签和标签）
+      - name: Extract Docker metadata
+        id: meta
+        # 使用 Docker metadata-action 提取元数据
+        uses: docker/metadata-action@v4
+        with:
+          # 使用定义的镜像名称
+          images: http-server
+          tags: |
+            # 设置最新标签
+            type=raw,value=latest,enable={{is_default_branch}}
+            # 设置基于标签的标签
+            type=ref,enable=true,priority=600,prefix=,suffix=,event=tag
         
       - uses: jerray/publish-docker-action@v1.0.5
         with:
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_PASSWORD }}
-            tags: ${{ steps.create_docker_tags.outputs.tags }}
+            tags: ${{ steps.meta.outputs.tags }}
             registry: registry.cn-hangzhou.aliyuncs.com
             repository: joeyzz/http-server
