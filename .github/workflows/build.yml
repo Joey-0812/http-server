@@ -25,13 +25,16 @@ jobs:
       run: |
         go build -v ./...
         pwd
-        echo "MY_TAG=$(git tag -l --sort=-v:refname | head -1)" >> $GITHUB_ENV
-    - name: Print environment variable
-      run: echo $MY_TAG
 
     - name: Test
       run: go test -v ./...
 
+
+    - id: create_docker_tags
+      run: |
+         echo "::set-output name=tags::latest,$(git tag -l --sort=-v:refname | head -1)"
+         echo ${{ steps.create_docker_tags.outputs.tags }}
+         
     - name: Upload Go results
       uses: actions/upload-artifact@v4
       with:
@@ -48,10 +51,6 @@ jobs:
         with:
           name: http-server
           path: /home/runner/work/http-server/http-server
-
-      - id: create_docker_tags
-        run: |
-          echo "::set-output name=tags::latest,$MY_TAG"
         
       - uses: jerray/publish-docker-action@v1.0.5
         with:
