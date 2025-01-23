@@ -22,11 +22,15 @@ jobs:
         go-version: '1.22'
 
     - name: Build
-      run: go build -v ./...
+      run: |
+        go build -v ./...
+        pwd
 
     - name: Test
       run: go test -v ./...
-      
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
+    - name: Upload Go test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: http-server
+        path: /home/runner/work/joeyzz/http-server

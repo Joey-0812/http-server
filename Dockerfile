@@ -7,7 +7,9 @@ WORKDIR /workspace
 # 把文件复制到当前工作目录
 COPY ./http-server .
 RUN ls
-COPY ./cert.pem .
-COPY ./key.pem .
+COPY ./server.crt .
+COPY ./server.key .
 RUN ls
+EXPOSE 443
+EXPOSE 80
 ENTRYPOINT [ "./http-server" ]
