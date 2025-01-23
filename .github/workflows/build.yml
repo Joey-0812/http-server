@@ -48,6 +48,9 @@ jobs:
 
       - id: create_docker_tags
         run: |
+          pwd
+          cd ./...
+          pwd
           echo "::set-output name=tags::latest,$(git tag -l --sort=-v:refname | head -1)"
           echo ${{ steps.create_docker_tags.outputs.tags }}
         
