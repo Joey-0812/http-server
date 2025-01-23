@@ -33,4 +33,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: http-server
-        path: /home/runner/work/joeyzz/http-server
+        path: /home/runner/work/http-server/http-server
