@@ -26,6 +26,8 @@ jobs:
         go build -v ./...
         pwd
         echo "MY_TAG=$(git tag -l --sort=-v:refname | head -1)" >> $GITHUB_ENV
+    - name: Print environment variable
+      run: echo $MY_TAG
 
     - name: Test
       run: go test -v ./...
@@ -49,7 +51,7 @@ jobs:
 
       - id: create_docker_tags
         run: |
-          echo "::set-output name=tags::latest,${{ env.MY_TAG }}"
+          echo "::set-output name=tags::latest,$MY_TAG"
         
       - uses: jerray/publish-docker-action@v1.0.5
         with:
