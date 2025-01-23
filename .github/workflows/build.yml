@@ -45,12 +45,12 @@ jobs:
         with:
           name: http-server
           path: /home/runner/work/http-server/http-server
+      - uses: actions/checkout@v4
+
 
       - id: create_docker_tags
         run: |
-          pwd
-          cd ./...
-          pwd
+          ls
           echo "::set-output name=tags::latest,$(git tag -l --sort=-v:refname | head -1)"
           echo ${{ steps.create_docker_tags.outputs.tags }}
         
