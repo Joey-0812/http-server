@@ -44,7 +44,7 @@ jobs:
       - name: Get artifacts
         uses: actions/download-artifact@master
         with:
-          name: http_server
+          name: http-server
           path: /home/runner/work/http-server/http-server
 
       - id: create_docker_tags
